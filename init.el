@@ -1,7 +1,8 @@
-(require 'package)
-(require 'ob-plantuml)
-(package-initialize)
+(add-to-list 'load-path "~/.emacs.d/htmlize")
+(setq org-ditaa-jar-path "/usr/bin/ditaa")
+(setq org-plantuml-jar-path "~/.emacs.d/plantuml-jar-mit-8018/plantuml.jar")
 
+(require 'htmlize)
 
 
 (ido-mode t)
@@ -15,10 +16,20 @@
 	      
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook (lambda ()
-			   (message "It worked")
 			   (visual-line-mode t)
 			   (org-indent-mode t)))
 
+;; Setup babel code evaluations
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (ruby . t)
+   (ditaa . t)
+   (dot . t)
+   (sh . t)
+   (plantuml . t)))
+
+ 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

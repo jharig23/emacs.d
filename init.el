@@ -1,9 +1,16 @@
+
+
 (add-to-list 'load-path "~/.emacs.d/htmlize")
+(add-to-list 'load-path "~/.emacs.d/plantuml-mode")
+
 (setq org-ditaa-jar-path "/usr/bin/ditaa")
 (setq org-plantuml-jar-path "~/.emacs.d/plantuml-jar-mit-8018/plantuml.jar")
+(setq plantuml-jar-path
+      (expand-file-name "~/.emacs.d/plantuml-jar-mit-8018/plantuml.jar"))
+
 
 (require 'htmlize)
-
+(require 'plantuml-mode)
 
 (ido-mode t)
 
@@ -29,7 +36,11 @@
    (sh . t)
    (plantuml . t)))
 
- 
+(defun my-org-confirm-babel-evaluate (lang body)
+  (not (string= lang "plantuml"))) 
+
+(setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

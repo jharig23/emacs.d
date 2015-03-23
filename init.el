@@ -1,4 +1,4 @@
-
+(server-start)
 
 (add-to-list 'load-path "~/.emacs.d/htmlize")
 (add-to-list 'load-path "~/.emacs.d/plantuml-mode")
@@ -18,13 +18,15 @@
 
 ;; Org mode items that I like
 (global-set-key (kbd "C-C l") 'org-store-link)
+
 (setq org-export-backends
-      (quote (md)))
+      '(ascii html icalendar latex md))
 	      
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook (lambda ()
 			   (visual-line-mode t)
-			   (org-indent-mode t)))
+			   (org-indent-mode t)
+			   (define-key org-mode-map (kbd "M-s <up>") 'org-table-kill-row)))
 
 ;; Setup babel code evaluations
 (org-babel-do-load-languages
@@ -37,7 +39,12 @@
    (plantuml . t)))
 
 (defun my-org-confirm-babel-evaluate (lang body)
-  (not (string= lang "plantuml"))) 
+  (not (or
+	(string= lang "plantuml")
+	(string= lang "ditaa")
+	))
+  )
+  
 
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 

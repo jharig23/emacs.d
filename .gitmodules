@@ -4,3 +4,6 @@
 [submodule "plantuml-mode"]
 	path = plantuml-mode
 	url = git@github.com:jharig23/plantuml-mode.git
+[submodule "groovy-emacs-modes"]
+	path = groovy-emacs-modes
+	url = git@github.com:Groovy-Emacs-Modes/groovy-emacs-modes.git

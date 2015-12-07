@@ -2,6 +2,7 @@
 
 (add-to-list 'load-path "~/.emacs.d/htmlize")
 (add-to-list 'load-path "~/.emacs.d/plantuml-mode")
+(add-to-list 'load-path "~/.emacs.d/groovy-emacs-modes")
 
 (setq org-ditaa-jar-path "/usr/bin/ditaa")
 (setq org-plantuml-jar-path "~/.emacs.d/plantuml-jar-mit-8018/plantuml.jar")
@@ -11,7 +12,7 @@
 
 (require 'htmlize)
 (require 'plantuml-mode)
-
+(require 'groovy-mode)
 (ido-mode t)
 
 (transient-mark-mode nil)

@@ -7,3 +7,6 @@
 [submodule "groovy-emacs-modes"]
 	path = groovy-emacs-modes
 	url = git@github.com:Groovy-Emacs-Modes/groovy-emacs-modes.git
+[submodule "json-mode"]
+	path = json-mode
+	url = git@github.com:jharig23/json-mode.git

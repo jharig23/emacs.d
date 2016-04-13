@@ -1,5 +1,19 @@
 (server-start)
 
+
+(require 'package)
+(add-to-list
+ 'package-archives
+ '("melpa" . "http://melpa.org/packages/")
+ t)
+
+(package-initialize)
+
+(elpy-enable)
+
+(add-hook 'python-mode-hook
+	  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+
 (add-to-list 'load-path "~/.emacs.d/htmlize")
 (add-to-list 'load-path "~/.emacs.d/plantuml-mode")
 (add-to-list 'load-path "~/.emacs.d/groovy-emacs-modes")
@@ -13,13 +27,25 @@
 (require 'htmlize)
 (require 'plantuml-mode)
 (require 'groovy-mode)
+(autoload `markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
 (ido-mode t)
 
 (transient-mark-mode nil)
 
+(defun revert-buffer-no-confirm ()
+    "Revert buffer without confirmation."
+    (interactive)
+    (revert-buffer t t))
+
 ;; Open File at point keybinding
 (global-set-key (kbd "C-x g") 'find-file-at-point)
-
+(global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 ;; Org mode items that I like
 (global-set-key (kbd "C-C l") 'org-store-link)
 

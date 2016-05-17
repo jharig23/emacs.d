@@ -1,5 +1,5 @@
-(server-start)
 
+(server-start)
 
 (require 'package)
 (add-to-list
@@ -9,10 +9,30 @@
 
 (package-initialize)
 
-(elpy-enable)
 
-(add-hook 'python-mode-hook
-	  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+(require 'git)
+(elpy-enable)
+(show-paren-mode 1)
+(setq show-paren-delay 0)
+(column-number-mode 1)
+
+
+(require 'highlight-symbol)
+(global-set-key [(control f3)] 'highlight-symbol)
+(global-set-key [f3] 'highlight-symbol-next)
+(global-set-key [(shift f3)] 'highlight-symbol-prev)
+(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
+
+;; This needs work
+;; (global-set-key (kbd "C-x o") 'switch-window)
+
+
+(setq tab-width 4)
+(setq-default tab-width 4)
+(setq indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
+
+(setq nxml-child-indent 2)
 
 (add-to-list 'load-path "~/.emacs.d/htmlize")
 (add-to-list 'load-path "~/.emacs.d/plantuml-mode")
@@ -23,10 +43,22 @@
 (setq plantuml-jar-path
       (expand-file-name "~/.emacs.d/plantuml-jar-mit-8018/plantuml.jar"))
 
+;; PYTHON THINGS
+(add-hook 'python-mode-hook
+	  (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+(add-hook 'python-mode-hook (lambda ()
+			      (require 'sphinx-doc)
+			      (sphinx-doc-mode t)))
+
+
 
 (require 'htmlize)
 (require 'plantuml-mode)
 (require 'groovy-mode)
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward)
+
 (autoload `markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
 
@@ -51,12 +83,18 @@
 
 (setq org-export-backends
       '(ascii html icalendar latex md))
-	      
+
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook (lambda ()
 			   (visual-line-mode t)
 			   (org-indent-mode t)
 			   (define-key org-mode-map (kbd "M-s <up>") 'org-table-kill-row)))
+
+;; Resize windows keybindings
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+    (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+    (global-set-key (kbd "S-C-<down>") 'shrink-window)
+    (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
 ;; Setup babel code evaluations
 (org-babel-do-load-languages
@@ -75,7 +113,7 @@
 	(string= lang "ditaa")
 	))
   )
-  
+
 
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 
@@ -118,7 +156,28 @@ by using nxml's indentation rules."
   (save-excursion
       (nxml-mode)
       (goto-char begin)
-      (while (search-forward-regexp "\>[ \\t]*\<" nil t) 
+      (while (search-forward-regexp "\>[ \\t]*\<" nil t)
         (backward-char) (insert "\n"))
       (indent-region begin end))
     (message "Ah, much better!"))
+
+
+(require 'hideshow)
+(require 'sgml-mode)
+(require 'nxml-mode)
+
+(add-to-list 'hs-special-modes-alist
+             '(nxml-mode
+               "<!--\\|<[^/>]*[^/]>"
+               "-->\\|</[^/>]*[^/]>"
+
+               "<!--"
+               sgml-skip-tag-forward
+               nil))
+
+
+
+(add-hook 'nxml-mode-hook 'hs-minor-mode)
+
+;; optional key bindings, easier than hs defaults
+(define-key nxml-mode-map (kbd "C-c h") 'hs-toggle-hiding)
